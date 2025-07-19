@@ -14,6 +14,7 @@ import logoImg from "@/assets/images/logo.png"
 import logoMiniImg from "@/assets/images/logo-mini.png"
 import { Button, Flex, Layout, Menu, theme, Typography } from "antd"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 const { Title } = Typography
 const { Header, Sider, Content } = Layout
@@ -23,6 +24,7 @@ interface Props {
 }
 
 export function AppLayout({ children }: Props) {
+  const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -51,20 +53,28 @@ export function AppLayout({ children }: Props) {
             <Image src={logoImg} width={260} height={40} alt="boxful-logo" />
           )}
         </div>
+        <div style={{ paddingLeft: 10, textTransform: "uppercase" }}>
+          <Title level={5}>Menú</Title>
+        </div>
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={["1"]}
+          style={{
+            background: "inherit",
+          }}
           items={[
             {
               key: "1",
               icon: <PlusOutlined />,
               label: "Crear orden",
+              onClick: () => router.push("/orders/create"),
             },
             {
               key: "2",
               icon: <FileSearchOutlined />,
               label: "Historial",
+              onClick: () => router.push("/orders"),
             },
           ]}
         />

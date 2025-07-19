@@ -49,7 +49,7 @@ export default function CreateOrderPage() {
                     message: "Por favor ingresa una fecha",
                   },
                 ]}
-              > 
+              >
                 <DatePicker
                   style={{ width: "100%" }}
                   placeholder="Selecciona una fecha"
