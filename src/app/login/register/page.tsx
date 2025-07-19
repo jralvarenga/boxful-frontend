@@ -9,9 +9,11 @@ import {
   Form,
   Grid,
   Input,
+  Layout,
   Row,
   Select,
   Space,
+  theme,
   Typography,
 } from "antd"
 import {
@@ -19,24 +21,30 @@ import {
   EyeTwoTone,
   LeftOutlined,
 } from "@ant-design/icons"
+import { useRouter } from "next/navigation"
+import { SelectRegionCode } from "@/components/select-region-code"
 
 const { Title, Text } = Typography
 
-const selectBefore = (
-  <Select defaultValue="+503">
-    <Select.Option value="+503">+503</Select.Option>
-  </Select>
-)
-
 export default function LoginPage() {
+  const router = useRouter()
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken()
+
   return (
-    <>
+    <Layout style={{ height: "100vh" }}>
       <Row
         style={{
           height: "100vh",
         }}
       >
-        <Col span={12}>
+        <Col
+          span={12}
+          style={{
+            background: colorBgContainer,
+          }}
+        >
           <Flex
             justify="center"
             align="center"
@@ -53,6 +61,7 @@ export default function LoginPage() {
                       <Button
                         shape="circle"
                         size="small"
+                        onClick={() => router.back()}
                         style={{ border: 0, marginRight: 10 }}
                       >
                         <LeftOutlined />
@@ -138,7 +147,7 @@ export default function LoginPage() {
                             Correo electrónico
                           </Text>
                         }
-                        name="firstName"
+                        name="email"
                         rules={[
                           {
                             required: true,
@@ -167,7 +176,7 @@ export default function LoginPage() {
                         ]}
                       >
                         <Input
-                          addonBefore={selectBefore}
+                          addonBefore={SelectRegionCode}
                           placeholder="7777 7777"
                         />
                       </Form.Item>
@@ -238,6 +247,6 @@ export default function LoginPage() {
         </Col>
         <Col span={12}></Col>
       </Row>
-    </>
+    </Layout>
   )
 }

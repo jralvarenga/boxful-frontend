@@ -8,8 +8,10 @@ import {
   Form,
   Grid,
   Input,
+  Layout,
   Row,
   Space,
+  theme,
   Typography,
 } from "antd"
 import Link from "next/link"
@@ -18,14 +20,23 @@ import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons"
 const { Title, Text } = Typography
 
 export default function LoginPage() {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken()
+
   return (
-    <>
+    <Layout style={{ height: "100vh" }}>
       <Row
         style={{
           height: "100vh",
         }}
       >
-        <Col span={12}>
+        <Col
+          span={12}
+          style={{
+            background: colorBgContainer,
+          }}
+        >
           <Flex
             justify="center"
             align="center"
@@ -104,6 +115,6 @@ export default function LoginPage() {
         </Col>
         <Col span={12}></Col>
       </Row>
-    </>
+    </Layout>
   )
 }
