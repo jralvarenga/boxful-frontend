@@ -16,13 +16,30 @@ import { Content } from "antd/es/layout/layout"
 import { ArrowRightOutlined } from "@ant-design/icons"
 import { SelectRegionCode } from "@/components/select-region-code"
 import { Order } from "boxful-types"
+import { useUser } from "@/hooks/use-user"
+import { useRouter } from "next/navigation"
+import { revalidateDataWithTag } from "@/actions/api"
 
 const { Text, Title } = Typography
 const colStyle: React.CSSProperties = { padding: 8 }
 
 export default function CreateOrderPage() {
-  const onFinish: FormProps<Order>["onFinish"] = (values) => {
-    console.log(values)
+  const { token } = useUser()
+  const router = useRouter()
+
+  const onFinish: FormProps<Order>["onFinish"] = async (values) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/orders`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(values),
+    })
+    const data = (await res.json()) as Order
+
+    router.push(`orders/${data.id}/products`)
+    await revalidateDataWithTag(`get_orders`)
   }
 
   return (
@@ -129,7 +146,7 @@ export default function CreateOrderPage() {
                     Correo eléctronico
                   </Text>
                 }
-                name="firstName"
+                name="email"
                 rules={[
                   {
                     required: true,
@@ -251,6 +268,7 @@ export default function CreateOrderPage() {
           </Row>
           <Flex justify="flex-end" style={{ marginTop: 16 }}>
             <Button
+              htmlType="submit"
               type="primary"
               icon={<ArrowRightOutlined />}
               iconPosition="end"

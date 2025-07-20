@@ -24,6 +24,10 @@ declare module 'boxful-types' {
         referencePoint: string
         instructions?: string
         createdAt?: string
+        _count?: {
+            Product: number
+        }
+        Product: Product[]
     }
 
     export interface User {
