@@ -6,6 +6,7 @@ import {
   Col,
   Flex,
   Form,
+  FormProps,
   Grid,
   Input,
   Layout,
@@ -21,8 +22,15 @@ const { Title, Text } = Typography
 
 export default function LoginPage() {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken()
+
+  const onFinish: FormProps<{
+    email: string
+    password: string
+  }>["onFinish"] = (values) => {
+    console.log(values);
+  }
 
   return (
     <Layout style={{ height: "100vh" }}>
@@ -51,7 +59,7 @@ export default function LoginPage() {
                   <Title level={4}>Bienvenido</Title>
                   <Text>Por favor ingresa tus credenciales</Text>
                 </div>
-                <Form>
+                <Form onFinish={onFinish}>
                   <Flex style={{ width: "100%" }} vertical gap={40}>
                     <Form.Item
                       layout="vertical"
@@ -94,6 +102,7 @@ export default function LoginPage() {
                       />
                     </Form.Item>
                   </Flex>
+
                   <div
                     style={{
                       marginTop: 10,
@@ -101,6 +110,11 @@ export default function LoginPage() {
                       textAlign: "center",
                     }}
                   >
+                    <Form.Item style={{ marginTop: 100 }}>
+                      <Button type="primary" htmlType="submit" block>
+                        Iniciar sesión
+                      </Button>
+                    </Form.Item>
                     <Text>
                       ¿Necesitas una cuenta?{" "}
                       <Link href={"/login/register"}>

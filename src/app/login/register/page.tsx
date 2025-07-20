@@ -7,6 +7,7 @@ import {
   DatePicker,
   Flex,
   Form,
+  FormProps,
   Grid,
   Input,
   Layout,
@@ -23,6 +24,7 @@ import {
 } from "@ant-design/icons"
 import { useRouter } from "next/navigation"
 import { SelectRegionCode } from "@/components/select-region-code"
+import { User } from "boxful-types"
 
 const { Title, Text } = Typography
 
@@ -31,6 +33,10 @@ export default function LoginPage() {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
+
+  const onFinish: FormProps<User>["onFinish"] = (values) => {
+    console.log(values);
+  }
 
   return (
     <Layout style={{ height: "100vh" }}>
@@ -71,7 +77,7 @@ export default function LoginPage() {
                   </Flex>
                   <Text>Completa la informacion de registro</Text>
                 </div>
-                <Form>
+                <Form onFinish={onFinish}>
                   <Row gutter={10} style={{ marginBottom: 30 }}>
                     <Col span={12}>
                       <Form.Item

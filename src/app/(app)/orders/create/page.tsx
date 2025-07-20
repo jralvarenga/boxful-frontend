@@ -7,6 +7,7 @@ import {
   DatePicker,
   Flex,
   Form,
+  FormProps,
   Input,
   Row,
   Typography,
@@ -14,11 +15,17 @@ import {
 import { Content } from "antd/es/layout/layout"
 import { ArrowRightOutlined } from "@ant-design/icons"
 import { SelectRegionCode } from "@/components/select-region-code"
+import { Order } from "boxful-types"
 
 const { Text, Title } = Typography
 const colStyle: React.CSSProperties = { padding: 8 }
 
 export default function CreateOrderPage() {
+  const onFinish: FormProps<Order>["onFinish"] = (values) => {
+    console.log(values);
+    
+  }
+
   return (
     <Content>
       <Title level={3}>Crea una orden</Title>
@@ -32,7 +39,7 @@ export default function CreateOrderPage() {
       <Card style={{ marginTop: 30 }}>
         <Title level={5}>Completa los datos</Title>
 
-        <Form>
+        <Form onFinish={onFinish}>
           <Row gutter={16}>
             <Col span={6} push={18} style={colStyle}>
               <Form.Item

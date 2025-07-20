@@ -1,12 +1,35 @@
 "use client"
 
-import { Button, Card, Col, Flex, Form, Row, Typography } from "antd"
+import {
+  Button,
+  Card,
+  Flex,
+  type FormProps,
+  Typography,
+} from "antd"
 import { Content } from "antd/es/layout/layout"
-import { ArrowRightOutlined } from "@ant-design/icons"
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons"
+import { useState } from "react"
+import { ProductRow } from "@/components/product-row"
+import { Product } from "boxful-types"
+import { ProductForm } from "@/components/product-form"
 
 const { Text, Title } = Typography
 
-export default function OrderPage() {
+export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([])
+
+  const onFinish: FormProps<Product>["onFinish"] = (values) => {
+    setProducts([...products, values])
+  }
+
+  const handleDeleteProduct = (index: number) => {
+    setProducts(products.filter((_, i) => i !== index))
+  }
+
   return (
     <Content>
       <Title level={3}>Crea una orden</Title>
@@ -18,49 +41,50 @@ export default function OrderPage() {
       </Text>
 
       <Card style={{ marginTop: 30 }}>
-        <Title level={5}>Completa los datos</Title>
+        <Title level={5}>Agrega tus productos</Title>
 
-        <Form>
-          <Row>
-            <Col span={6} push={18}>
-              col-18 col-push-6
-            </Col>
-            <Col span={18} pull={6}>
-              col-6 col-pull-18
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>col-8</Col>
-            <Col span={8}>col-8</Col>
-            <Col span={8}>col-8</Col>
-          </Row>
-          <Row>
-            <Col span={18} push={6}>
-              col-18 col-push-6
-            </Col>
-            <Col span={6} pull={18}>
-              col-6 col-pull-18
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>col-8</Col>
-            <Col span={8}>col-8</Col>
-            <Col span={8}>col-8</Col>
-          </Row>
+        <ProductForm onFinish={onFinish} />
 
-          <Row>
-            <Col span={28}>col-12</Col>
-          </Row>
-          <Flex justify="flex-end">
+        <Content style={{ marginTop: 50 }}>
+          <Flex vertical gap={15}>
+            {products.map((product, i) => (
+              <ProductRow
+                key={i}
+                product={product}
+                onProductDelete={() => handleDeleteProduct(i)}
+              />
+            ))}
+          </Flex>
+        </Content>
+
+        <Flex
+          align="center"
+          justify="space-between"
+          style={{
+            marginTop: 40,
+          }}
+        >
+          <div>
             <Button
+              htmlType="submit"
+              block
+              icon={<ArrowLeftOutlined />}
+              iconPosition="start"
+            >
+              Regresar
+            </Button>
+          </div>
+          <div>
+            <Button
+              block
               type="primary"
               icon={<ArrowRightOutlined />}
               iconPosition="end"
             >
-              Siguiente
+              Enviar
             </Button>
-          </Flex>
-        </Form>
+          </div>
+        </Flex>
       </Card>
     </Content>
   )
