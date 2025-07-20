@@ -1,17 +1,8 @@
 "use client"
 
-import {
-  Button,
-  Card,
-  Flex,
-  type FormProps,
-  Typography,
-} from "antd"
+import { Button, Card, Flex, type FormProps, Typography } from "antd"
 import { Content } from "antd/es/layout/layout"
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons"
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons"
 import { useState } from "react"
 import { ProductRow } from "@/components/product-row"
 import { Product } from "boxful-types"

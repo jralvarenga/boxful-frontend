@@ -25,6 +25,7 @@ import {
 import { useRouter } from "next/navigation"
 import { SelectRegionCode } from "@/components/select-region-code"
 import { User } from "boxful-types"
+import { setCookie } from "@/actions/cookies"
 
 const { Title, Text } = Typography
 
@@ -34,8 +35,25 @@ export default function LoginPage() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
 
-  const onFinish: FormProps<User>["onFinish"] = (values) => {
-    console.log(values);
+  const onFinish: FormProps<User>["onFinish"] = async (values) => {
+    // @ts-expect-error
+    delete values.passwordRepeat
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          ...values,
+        }),
+      },
+    )
+
+    const data = await res.json()
+    await setCookie("token", data.access_token)
+    router.push("/")
   }
 
   return (

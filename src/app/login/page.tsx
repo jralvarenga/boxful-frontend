@@ -17,10 +17,13 @@ import {
 } from "antd"
 import Link from "next/link"
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons"
+import { setCookie } from "@/actions/cookies"
+import { useRouter } from "next/navigation"
 
 const { Title, Text } = Typography
 
 export default function LoginPage() {
+  const router = useRouter()
   const {
     token: { colorBgContainer },
   } = theme.useToken()
@@ -28,8 +31,21 @@ export default function LoginPage() {
   const onFinish: FormProps<{
     email: string
     password: string
-  }>["onFinish"] = (values) => {
-    console.log(values);
+  }>["onFinish"] = async (values) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        ...values,
+      }),
+    })
+
+    const data = await res.json()
+
+    await setCookie("token", data.access_token)
+    router.push("/")
   }
 
   return (

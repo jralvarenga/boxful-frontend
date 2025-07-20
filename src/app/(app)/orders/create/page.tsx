@@ -22,8 +22,7 @@ const colStyle: React.CSSProperties = { padding: 8 }
 
 export default function CreateOrderPage() {
   const onFinish: FormProps<Order>["onFinish"] = (values) => {
-    console.log(values);
-    
+    console.log(values)
   }
 
   return (

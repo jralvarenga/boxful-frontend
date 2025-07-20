@@ -1,5 +1,6 @@
 "use client"
 
+import { useUser } from "@/hooks/use-user"
 import {
   Button,
   DatePicker,
@@ -54,6 +55,9 @@ const columns: TableColumnsType<DataType> = [
 
 export default function OrdersPage() {
   const router = useRouter()
+  const { user } = useUser()
+  console.log(user)
+
   const rowSelection: TableProps<DataType>["rowSelection"] = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
       console.log(
