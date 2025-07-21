@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"
 import { AntdRegistry } from "@ant-design/nextjs-registry"
+import { ConfigProvider } from "antd"
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -27,7 +28,27 @@ export default function RootLayout({
     <html lang="en">
       {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body>
-        <AntdRegistry>{children}</AntdRegistry>
+        <AntdRegistry>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#2E49CE",
+              },
+              components: {
+                Button: {
+                  borderRadius: 8,
+                  padding: 20,
+                  fontWeight: 500,
+                },
+                Input: {
+                  borderRadius: 6,
+                },
+              },
+            }}
+          >
+            {children}
+          </ConfigProvider>
+        </AntdRegistry>
       </body>
     </html>
   )

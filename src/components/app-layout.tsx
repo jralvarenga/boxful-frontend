@@ -3,20 +3,19 @@
 import React, { useState } from "react"
 import {
   FileSearchOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PlusOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons"
 import logoImg from "@/assets/images/logo.png"
 import logoMiniImg from "@/assets/images/logo-mini.png"
 import { Button, Flex, Layout, Menu, theme, Typography } from "antd"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useUser } from "@/hooks/use-user"
 
-const { Title } = Typography
+const { Title, Text } = Typography
 const { Header, Sider, Content } = Layout
 
 interface Props {
@@ -24,6 +23,7 @@ interface Props {
 }
 
 export function AppLayout({ children }: Props) {
+  const { user, logout } = useUser()
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const {
@@ -32,7 +32,15 @@ export function AppLayout({ children }: Props) {
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} width={340}>
+      <Sider
+        style={{
+          background: "inherit",
+        }}
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width={340}
+      >
         <div
           className="demo-logo-vertical"
           style={{
@@ -54,14 +62,16 @@ export function AppLayout({ children }: Props) {
           )}
         </div>
         <div style={{ paddingLeft: 10, textTransform: "uppercase" }}>
-          <Title level={5}>Menú</Title>
+          <Text strong>Menú</Text>
         </div>
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["2"]}
           style={{
             background: "inherit",
+            padding: 20,
+            color: "red",
           }}
           items={[
             {
@@ -69,12 +79,22 @@ export function AppLayout({ children }: Props) {
               icon: <PlusOutlined />,
               label: "Crear orden",
               onClick: () => router.push("/orders/create"),
+              style: {
+                borderRadius: 0,
+                height: 72,
+                color: "initial",
+              },
             },
             {
               key: "2",
               icon: <FileSearchOutlined />,
               label: "Historial",
               onClick: () => router.push("/orders"),
+              style: {
+                borderRadius: 0,
+                height: 72,
+                color: "initial",
+              },
             },
           ]}
         />
@@ -96,11 +116,20 @@ export function AppLayout({ children }: Props) {
                   marginRight: 10,
                 }}
               />
-              Crear envio
+              Crear orden
             </Title>
-            <div>
-              <Title level={5}>Nombre</Title>
-            </div>
+            <Flex align="center" gap={10}>
+              <Text strong>
+                {user?.firstName} {user?.lastName}
+              </Text>
+              <Button
+                onClick={logout}
+                danger
+                type="primary"
+                shape="circle"
+                icon={<LogoutOutlined />}
+              />
+            </Flex>
           </Flex>
         </Header>
         <Content

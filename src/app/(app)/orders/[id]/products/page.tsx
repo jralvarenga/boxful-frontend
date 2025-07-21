@@ -4,7 +4,7 @@ import { ProductsOnOrder } from "@/components/products-on-order"
 export default async function ProductsPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const store = await params
   const order = await getOrder(store.id)

@@ -9,10 +9,13 @@ import React, {
 } from "react"
 import { jwtDecode } from "jwt-decode"
 import { User } from "boxful-types"
+import { useRouter } from "next/navigation"
+import { deleteCookie } from "@/actions/cookies"
 
 interface TokenContextType {
   token: string | null
   user: User | null
+  logout: () => void
 }
 
 const UserContext = createContext<TokenContextType | undefined>(undefined)
@@ -24,6 +27,7 @@ export function UserProvider({
   children: ReactNode
   token: string
 }) {
+  const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
@@ -34,8 +38,13 @@ export function UserProvider({
     }
   }, [token])
 
+  async function logout() {
+    await deleteCookie("token")
+    router.push("/login")
+  }
+
   return (
-    <UserContext.Provider value={{ token, user }}>
+    <UserContext.Provider value={{ token, user, logout }}>
       {children}
     </UserContext.Provider>
   )

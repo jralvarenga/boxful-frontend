@@ -20,3 +20,8 @@ export async function getCookie(name: string): Promise<string | undefined> {
   const cookie = store.get(name)
   return cookie?.value
 }
+
+export async function deleteCookie(name: string){
+  const store = await cookies()
+  store.delete(name)
+}

@@ -7,11 +7,10 @@ import {
   Flex,
   Form,
   FormProps,
-  Grid,
   Input,
   Layout,
+  message,
   Row,
-  Space,
   theme,
   Typography,
 } from "antd"
@@ -27,25 +26,38 @@ export default function LoginPage() {
   const {
     token: { colorBgContainer },
   } = theme.useToken()
+  const [messageApi] = message.useMessage()
 
   const onFinish: FormProps<{
     email: string
     password: string
   }>["onFinish"] = async (values) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify({
-        ...values,
-      }),
-    })
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify({
+          ...values,
+        }),
+      })
 
-    const data = await res.json()
+      if (res.status !== 200) {
+        return
+      }
 
-    await setCookie("token", data.access_token)
-    router.push("/")
+      const data = await res.json()
+
+      await setCookie("token", data.access_token)
+      router.push("/")
+    } catch (error) {
+      console.error(error)
+      messageApi.open({
+        type: "error",
+        content: "Correo o contraseña incorrectos",
+      })
+    }
   }
 
   return (

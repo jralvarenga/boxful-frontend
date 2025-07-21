@@ -8,12 +8,11 @@ import {
   Flex,
   Form,
   FormProps,
-  Grid,
   Input,
   Layout,
+  Modal,
   Row,
   Select,
-  Space,
   theme,
   Typography,
 } from "antd"
@@ -22,22 +21,38 @@ import {
   EyeTwoTone,
   LeftOutlined,
 } from "@ant-design/icons"
+import warningImg from "@/assets/images/warning.png"
 import { useRouter } from "next/navigation"
 import { SelectRegionCode } from "@/components/select-region-code"
 import { User } from "boxful-types"
 import { setCookie } from "@/actions/cookies"
+import { useState } from "react"
+import { Content } from "antd/es/layout/layout"
+import Image from "next/image"
 
 const { Title, Text } = Typography
 
 export default function LoginPage() {
   const router = useRouter()
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken()
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
 
   const onFinish: FormProps<User>["onFinish"] = async (values) => {
-    // @ts-expect-error
-    delete values.passwordRepeat
+    setUser(values)
+    setOpenConfirm(true)
+  }
+
+  function handleCancel() {
+    setUser(null)
+    setOpenConfirm(false)
+  }
+
+  const createUser = async () => {
+    // @ts-expect-error password repeat is not part of the types for this model
+    delete user?.passwordRepeat
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
       {
@@ -46,7 +61,7 @@ export default function LoginPage() {
           "content-type": "application/json; charset=utf-8",
         },
         body: JSON.stringify({
-          ...values,
+          ...user!,
         }),
       },
     )
@@ -271,6 +286,47 @@ export default function LoginPage() {
         </Col>
         <Col span={12}></Col>
       </Row>
+
+      <Modal
+        closable={{ "aria-label": "Custom Close Button" }}
+        open={openConfirm}
+        onOk={createUser}
+        centered
+        onCancel={handleCancel}
+        okText="Aceptar"
+        cancelText="Cancelar"
+      >
+        <Flex vertical gap={7} align="center">
+          <Content
+            style={{
+              flex: 1,
+            }}
+          >
+            <Image src={warningImg} width={70} height={70} alt="warning" />
+          </Content>
+          <Text
+            style={{
+              fontSize: 18,
+            }}
+          >
+            Confirmar número{" "}
+            <Text
+              strong
+              style={{
+                fontSize: 18,
+              }}
+            >
+              de teléfono
+            </Text>
+          </Text>
+          <p>
+            <Text>
+              Está seguro que desea continuar con el número{" "}
+              <Text strong>{user?.phoneNumber || ""}</Text>
+            </Text>
+          </p>
+        </Flex>
+      </Modal>
     </Layout>
   )
 }
