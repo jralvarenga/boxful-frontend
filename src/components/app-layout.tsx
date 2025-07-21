@@ -26,6 +26,7 @@ export function AppLayout({ children }: Props) {
   const { user, logout } = useUser()
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
+  const [selected, setSelected] = useState('2')
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
@@ -67,7 +68,10 @@ export function AppLayout({ children }: Props) {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["2"]}
+          selectedKeys={[selected]}
+          onSelect={(e) => {
+            setSelected(e.key)
+          }}
           style={{
             background: "inherit",
             padding: 20,
@@ -82,7 +86,7 @@ export function AppLayout({ children }: Props) {
               style: {
                 borderRadius: 0,
                 height: 72,
-                color: "initial",
+                color: selected === '1' ? "white" : 'initial',
               },
             },
             {
@@ -93,7 +97,7 @@ export function AppLayout({ children }: Props) {
               style: {
                 borderRadius: 0,
                 height: 72,
-                color: "initial",
+                color: selected === '2' ? "white" : 'initial',
               },
             },
           ]}
